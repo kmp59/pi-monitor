@@ -20,7 +20,7 @@
   "type": "commonjs",
   "main": "app.js",
   "scripts": {
-    "run": "nodemon app.js",
+    "run": "node app.js",
     "test": "vitest"
   },
   "dependencies": {
