@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>🍓 Raspberry Pi Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon.png" />
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background: #f5f5f5;
+        }
+        .card {
+            border-radius: 1rem;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .metric {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+        .small {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        canvas {
+            max-width: 120px;
+            max-height: 120px;
+            margin: 0 auto;
+            display: block;
+        }
+        #metricsContainer {
+            overflow-y: auto;
+            flex: 1;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-10 p-4 flex justify-between items-center bg-gray-100 dark:bg-gray-900 shadow">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold flex-1 text-center">
+            🍓 Raspberry Pi Health Dashboard
+        </h1>
+        <button id="darkModeToggle" class="ml-4 px-4 py-2 rounded transition
+            bg-gray-800 text-white hover:bg-gray-700
+            dark:bg-gray-200 dark:text-gray-900 dark:hover:bg-gray-300">
+            Toggle Dark Mode
+        </button>
+    </header>
+
+    <!-- Metrics Grid -->
+    <div id="metricsContainer" class="flex-1 p-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-7xl mx-auto">
+
+            <!-- CPU Card -->
+            <div class="card bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" id="cpuCard">
+                <div class="small">💻 CPU</div>
+                <canvas id="cpuChart"></canvas>
+                <div class="metric" id="cpuUsage">—%</div>
+                <div class="small" id="cpuLoad">load: —</div>
+            </div>
+
+            <!-- Memory Card -->
+            <div class="card bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" id="memCard">
+                <div class="small">💾 Memory</div>
+                <canvas id="memChart"></canvas>
+                <div class="metric" id="memUsage">—%</div>
+                <div class="small" id="memDetail">—</div>
+            </div>
+
+            <!-- Disk Card -->
+            <div class="card bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" id="diskCard">
+                <div class="small">📀 Disk</div>
+                <canvas id="diskChart"></canvas>
+                <div class="metric" id="diskUsage">—%</div>
+                <div class="small" id="diskDetail">—</div>
+            </div>
+
+            <!-- Temperature Card -->
+            <div class="card bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" id="tempCard">
+                <div class="small">🌡️ Temperature</div>
+                <canvas id="tempChart"></canvas>
+                <div class="metric" id="tempMain">—°C</div>
+                <div class="small" id="tempDetail">—</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Python App Console Logs -->
+    <div class="max-w-7xl mx-auto mt-8 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
+        <div class="flex justify-between items-center mb-2">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">🧠 Python App Console Logs</h2>
+            <button id="restartAppBtn"
+                    class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
+                Restart Python App
+            </button>
+        </div>
+
+        <pre id="pythonLogs" class="bg-gray-100 dark:bg-gray-900 dark:text-gray-100 p-4 rounded overflow-auto max-h-64">
+            Waiting for logs...
+        </pre>
+    </div>
+
+
+    <!-- Raw Metrics Toggle -->
+    <footer class="sticky bottom-0 bg-gray-100 dark:bg-gray-900 z-10 p-4 shadow">
+        <div class="max-w-7xl mx-auto">
+            <button id="toggleRawBtn" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition mb-2">
+                Show Raw Metrics
+            </button>
+
+            <div id="rawContainer" class="overflow-hidden max-h-0 transition-all duration-500">
+            <pre id="raw" class="bg-white dark:bg-gray-800 dark:text-gray-100 p-4 rounded shadow overflow-auto max-h-64">
+                waiting for metrics...
+            </pre>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>

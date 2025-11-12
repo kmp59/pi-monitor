@@ -18,12 +18,16 @@
   "license": "ISC",
   "author": "KevTheDev",
   "type": "commonjs",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
+    "run": "nodemon app.js",
     "test": "vitest"
   },
   "dependencies": {
     "express": "^5.1.0",
     "systeminformation": "^5.27.11"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
   }
 }
