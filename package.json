@@ -1,0 +1,29 @@
+{
+  "name": "pi-monitor",
+  "version": "1.0.0",
+  "description": "Raspberry PI Resources Tracker",
+  "keywords": [
+    "pi-monitor",
+    "node",
+    "resouces"
+  ],
+  "homepage": "https://github.com/kmp59/pi-monitor#readme",
+  "bugs": {
+    "url": "https://github.com/kmp59/pi-monitor/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kmp59/pi-monitor.git"
+  },
+  "license": "ISC",
+  "author": "KevTheDev",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "systeminformation": "^5.27.11"
+  }
+}
