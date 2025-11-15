@@ -145,13 +145,3 @@ toggleBtn.addEventListener('click', () => {
         toggleBtn.textContent = 'Show Raw Metrics';
     }
 });
-
-// ============================
-// Dark Mode Toggle
-// ============================
-const darkToggle = document.getElementById('darkModeToggle');
-
-darkToggle.addEventListener('click', () => {
-    document.documentElement.classList.toggle('dark');
-    updateChartColors();
-});

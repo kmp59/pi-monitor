@@ -1,62 +1,74 @@
-import express from 'express';
-import { spawn } from 'child_process';
-
-const app = express();
-let clients = [];
-let pythonProcess = null;
-
-// SSE stream for Python logs
-app.get('/logs', (req, res) => {
-    res.set({
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive'
-    });
-    res.flushHeaders();
-    clients.push(res);
-
-    req.on('close', () => {
-        clients = clients.filter(c => c !== res);
-    });
+document.addEventListener("DOMContentLoaded", () => {
+    loadTodayCSV();
 });
 
-function broadcastLog(message) {
-    for (const c of clients) {
-        c.write(`data: ${message}\n\n`);
+async function loadTodayCSV() {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+
+    const fileName = `${yyyy}-${mm}-${dd}.csv`;
+
+    console.log("Loading hourly file:", fileName);
+
+    try {
+        const response = await fetch(`/logs/${fileName}`);
+        if (!response.ok) {
+            console.warn("No CSV found:", fileName);
+            return;
+        }
+        const csvText = await response.text();
+        parseAndApplyCSV(csvText);
+
+    } catch (error) {
+        console.error("Error:", error);
     }
 }
 
-// Function to start the Python app
-function startPythonApp() {
-    if (pythonProcess) pythonProcess.kill();
+function parseAndApplyCSV(csvText) {
+    const lines = csvText.trim().split("\n");
 
-    broadcastLog('\n--- Starting Python App ---\n');
+    for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) continue;
 
-    pythonProcess = spawn('python3', ['/home/pi/Desktop/automation/main.py']);
+        // Format: "12:02, 72"
+        const [timeRaw] = trimmed.split(",");
+        if (!timeRaw) continue;
 
-    pythonProcess.stdout.on('data', (data) => {
-        broadcastLog(data.toString());
-    });
+        let [hh, mm] = timeRaw.split(":").map(x => x.trim());
+        hh = parseInt(hh, 10);
 
-    pythonProcess.stderr.on('data', (data) => {
-        broadcastLog('[ERR] ' + data.toString());
-    });
+        if (isNaN(hh)) {
+            console.warn("Invalid hour:", timeRaw);
+            continue;
+        }
 
-    pythonProcess.on('close', (code) => {
-        broadcastLog(`Python app exited with code ${code}`);
-        // Optional: auto-restart on crash
-        // setTimeout(startPythonApp, 3000);
-    });
+        // --- FIXED NOON LOGIC ---
+        let period = "am";
+        let hour12 = hh;
+
+        if (hh === 0) {
+            hour12 = 12;       // 00 → 12 AM
+            period = "am";
+        } else if (hh === 12) {
+            hour12 = 12;       // 12 → 12 PM
+            period = "pm";
+        } else if (hh > 12) {
+            hour12 = hh - 12;  // 13–23 → 1–11 PM
+            period = "pm";
+        }
+        // else (1–11) stays AM naturally
+
+        const checkboxId = `${period}-${hour12}`;
+
+        const checkbox = document.querySelector(
+            `.hour-checkbox[data-id="${checkboxId}"]`
+        );
+
+        if (checkbox) {
+            checkbox.checked = true;
+        }
+    }
 }
-
-// Trigger manually via frontend
-app.get('/trigger-app', (req, res) => {
-    startPythonApp();
-    res.send('Restart command sent.');
-});
-
-// Start everything
-app.listen(3000, () => {
-    console.log('Dashboard running at http://localhost:3000');
-    startPythonApp();
-});

@@ -52,18 +52,13 @@
         }
     </style>
 </head>
-<body class="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+<body class="flex flex-col min-h-screen bg-gray-900 text-gray-100">
 
     <!-- Header -->
-    <header class="sticky top-0 z-10 p-4 flex justify-between items-center bg-gray-100 dark:bg-gray-900 shadow">
+    <header class="sticky top-0 z-10 p-4 flex justify-between items-center bg-gray-900 shadow">
         <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold flex-1 text-center">
             🍓 Raspberry Pi Health Dashboard
         </h1>
-        <button id="darkModeToggle" class="ml-4 px-4 py-2 rounded transition
-            bg-gray-800 text-white hover:bg-gray-700
-            dark:bg-gray-200 dark:text-gray-900 dark:hover:bg-gray-300">
-            Toggle Dark Mode
-        </button>
     </header>
 
     <!-- Metrics Grid -->
@@ -71,7 +66,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-7xl mx-auto">
 
             <!-- CPU Card -->
-            <div class="card bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" id="cpuCard">
+            <div class="card bg-gray-800 text-gray-100" id="cpuCard">
                 <div class="small">💻 CPU</div>
                 <canvas id="cpuChart"></canvas>
                 <div class="metric" id="cpuUsage">—%</div>
@@ -79,7 +74,7 @@
             </div>
 
             <!-- Memory Card -->
-            <div class="card bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" id="memCard">
+            <div class="card bg-gray-800 text-gray-100" id="memCard">
                 <div class="small">💾 Memory</div>
                 <canvas id="memChart"></canvas>
                 <div class="metric" id="memUsage">—%</div>
@@ -87,7 +82,7 @@
             </div>
 
             <!-- Disk Card -->
-            <div class="card bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" id="diskCard">
+            <div class="card bg-gray-800 text-gray-100" id="diskCard">
                 <div class="small">📀 Disk</div>
                 <canvas id="diskChart"></canvas>
                 <div class="metric" id="diskUsage">—%</div>
@@ -95,7 +90,7 @@
             </div>
 
             <!-- Temperature Card -->
-            <div class="card bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" id="tempCard">
+            <div class="card bg-gray-800 text-gray-100" id="tempCard">
                 <div class="small">🌡️ Temperature</div>
                 <canvas id="tempChart"></canvas>
                 <div class="metric" id="tempMain">—°C</div>
@@ -105,31 +100,71 @@
         </div>
     </div>
 
-    <!-- Python App Console Logs -->
-    <div class="max-w-7xl mx-auto mt-8 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-        <div class="flex justify-between items-center mb-2">
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">🧠 Python App Console Logs</h2>
-            <button id="restartAppBtn"
-                    class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
-                Restart Python App
-            </button>
-        </div>
+    <!-- Enhanced Hourly Checklist Table -->
+    <!-- Hourly Checklist TABLE — sticky below header -->
+    <div class="max-w-7xl mx-auto p-6 bg-gray-800 rounded-2xl shadow-xl sticky top-24 z-20">
+        <h2 class="text-3xl font-extrabold mb-5 text-gray-100 flex items-center">
+            🕒 Hourly Checklist
+        </h2>
 
-        <pre id="pythonLogs" class="bg-gray-100 dark:bg-gray-900 dark:text-gray-100 p-4 rounded overflow-auto max-h-64">
-            Waiting for logs...
-        </pre>
+        <div class="overflow-x-auto">
+            <table class="w-full border-collapse rounded-xl overflow-hidden shadow-lg">
+                <thead class="bg-gray-700 text-gray-100">
+                <tr>
+                    <th class="p-3 text-left w-24">Period</th>
+                    <th class="p-3">1</th><th class="p-3">2</th><th class="p-3">3</th><th class="p-3">4</th>
+                    <th class="p-3">5</th><th class="p-3">6</th><th class="p-3">7</th><th class="p-3">8</th>
+                    <th class="p-3">9</th><th class="p-3">10</th><th class="p-3">11</th><th class="p-3">12</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr class="bg-blue-900/30">
+                    <th class="p-3 font-semibold text-blue-200">AM</th>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="am-1" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="am-2" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="am-3" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="am-4" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="am-5" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="am-6" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="am-7" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="am-8" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="am-9" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="am-10" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="am-11" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="pm-12" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                </tr>
+
+                <tr class="bg-purple-900/30">
+                    <th class="p-3 font-semibold text-purple-200">PM</th>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="pm-1" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="pm-2" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="pm-3" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="pm-4" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="pm-5" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="pm-6" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="pm-7" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="pm-8" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="pm-9" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="pm-10" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="pm-11" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                    <td class="p-3 text-center"><input type="checkbox" data-id="am-12" class="hour-checkbox w-6 h-6" disabled tabindex="-1"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
 
     <!-- Raw Metrics Toggle -->
-    <footer class="sticky bottom-0 bg-gray-100 dark:bg-gray-900 z-10 p-4 shadow">
+    <footer class="sticky bottom-0 bg-gray-900 z-10 p-4 shadow">
         <div class="max-w-7xl mx-auto">
             <button id="toggleRawBtn" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition mb-2">
                 Show Raw Metrics
             </button>
 
             <div id="rawContainer" class="overflow-hidden max-h-0 transition-all duration-500">
-            <pre id="raw" class="bg-white dark:bg-gray-800 dark:text-gray-100 p-4 rounded shadow overflow-auto max-h-64">
+            <pre id="raw" class="bg-gray-800 text-gray-100 p-4 rounded shadow overflow-auto max-h-64">
                 waiting for metrics...
             </pre>
             </div>
@@ -137,5 +172,6 @@
     </footer>
 
     <script src="main.js"></script>
+    <script src="pyApp.js"></script>
 </body>
 </html>
